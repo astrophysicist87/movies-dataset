@@ -20,7 +20,8 @@ st.write("Welcome, ", st.session_state.name, "!")
 # reruns (e.g. if the user interacts with the widgets).
 @st.cache_data
 def load_data(uploaded_file):
-    df = pd.read_csv(uploaded_file)
+    #df = pd.read_csv(uploaded_file)
+    df = pd.read_excel(uploaded_file)
     return df
 
 
