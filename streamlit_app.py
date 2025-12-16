@@ -88,7 +88,7 @@ if dataframe is not None:
     
     # 4. Use curve_fit to find optimal parameters
     # Provide initial guesses for parameters if possible (optional but recommended for complex models)
-    initial_guesses = [1.0, 1.0, 1.0, 1.0] 
+    initial_guesses = [1.0, 0.0, 1.0, 0.0] 
     fitted_params, pcov = curve_fit(fit_function, xData, yData, initial_guesses)
     
     # 5. Get predictions and evaluate
