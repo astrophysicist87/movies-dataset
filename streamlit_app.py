@@ -75,6 +75,25 @@ if selection == 1:
             ),
         },)
 
+
+df = pd.DataFrame(
+[
+    {"x": 0, "y": 0}
+]
+)
+dataframe = st.data_editor(df, num_rows="dynamic",\
+    column_config={
+    "x": st.column_config.NumberColumn(
+        step=1e-16,      # Set a float step to allow decimal entry
+        format="%.16f", # Use a float format string
+    ),
+    "y": st.column_config.NumberColumn(
+        step=1e-16,      # Set a float step to allow decimal entry
+        format="%.16f", # Use a float format string
+    ),
+},)
+
+
 st.write("selection = ", selection)
 
 st.write("dataframe(0) = ", dataframe)
