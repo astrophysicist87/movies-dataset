@@ -70,8 +70,8 @@ else:
             ),
         },)
 
+if dataframe:
+    fig = px.line(dataframe, x='x', y='y')
 
-fig = px.line(dataframe, x='x', y='y')
-
-st.plotly_chart(fig)
+    st.plotly_chart(fig)
 
