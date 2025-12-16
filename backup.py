@@ -48,43 +48,16 @@ def load_data(uploaded_file):
     #df = pd.read_excel(uploaded_file)
     return df
 
-def fit_function(x, a, b, c, Offset):
-    return c * np.tanh(a * (x - b)) + Offset
-    
 
-#========================================
+dataframe = None
+
 if selection == 0:
     uploaded_file = st.file_uploader("Choose a file")
     if uploaded_file is not None:
         # Can be used wherever a "file-like" object is accepted:
         dataframe = load_data(uploaded_file)
         st.write(dataframe)
-        
-        # (Assuming xData and yData are defined as numpy arrays)
-        xData = dataframe['x'].to_numpy()
-        yData = dataframe['y'].to_numpy()
-        
-        # 4. Use curve_fit to find optimal parameters
-        # Provide initial guesses for parameters if possible (optional but recommended for complex models)
-        initial_guesses = [1.0, 0.0, 1.0, 0.0] 
-        fitted_params, pcov = curve_fit(fit_function, xData, yData, initial_guesses)
-        
-        # 5. Get predictions and evaluate
-        model_predictions = fit_function(xData, *fitted_params)
-        # Calculate R-squared or RMSE here (see search results for examples)
-        
-        st.write("fitted_params = ", fitted_params)
-        
-        
-        results_dict = {'x': xData, 'y': model_predictions}
-        df_results = pd.DataFrame(results_dict)
-        
-        fig = px.line(dataframe, x='x', y='y')
-        #fig = px.line(df_results, x='x', y='y')
-        
-        st.plotly_chart(fig)
-#========================================
-elif selection == 1:
+if selection == 1:
     df = pd.DataFrame(
         [
             {"x": 0, "y": 0}
@@ -102,6 +75,38 @@ elif selection == 1:
             ),
         },)
 
+
+df = pd.DataFrame(
+[
+    {"x": 0, "y": 0}
+]
+)
+dataframe = st.data_editor(df, num_rows="dynamic",\
+    column_config={
+    "x": st.column_config.NumberColumn(
+        step=1e-16,      # Set a float step to allow decimal entry
+        format="%.16f", # Use a float format string
+    ),
+    "y": st.column_config.NumberColumn(
+        step=1e-16,      # Set a float step to allow decimal entry
+        format="%.16f", # Use a float format string
+    ),
+},)
+
+
+st.write("selection = ", selection)
+
+st.write("dataframe(0) = ", dataframe)
+
+#====================================================================
+# if dataframe is defined, do fitting and plotting
+if dataframe is not None:
+    st.write("dataframe(1) = ", dataframe)
+    
+    # 1. Define the nonlinear function
+    def fit_function(x, a, b, c, Offset):
+        return c * np.tanh(a * (x - b)) + Offset
+        
     # (Assuming xData and yData are defined as numpy arrays)
     xData = dataframe['x'].to_numpy()
     yData = dataframe['y'].to_numpy()
@@ -117,6 +122,7 @@ elif selection == 1:
     
     st.write("fitted_params = ", fitted_params)
     
+    st.write("dataframe(2) = ", dataframe)
     
     results_dict = {'x': xData, 'y': model_predictions}
     df_results = pd.DataFrame(results_dict)
