@@ -85,7 +85,17 @@ df2 = pd.DataFrame(
         {"x": 0, "y": 0}
     ]
 )
-edited_df = st.data_editor(df2, num_rows="dynamic")
+edited_df = st.data_editor(df2, num_rows="dynamic",\
+        column_config={
+        "x": st.column_config.NumberColumn(
+            step=1e-16,      # Set a float step to allow decimal entry
+            format="$%.8f", # Use a float format string
+        ),
+        "y": st.column_config.NumberColumn(
+            step=1e-16,      # Set a float step to allow decimal entry
+            format="$%.8f", # Use a float format string
+        ),
+    },)
 
 #favorite_command = edited_df.loc[edited_df["rating"].idxmax()]["command"]
 #st.markdown(f"Your favorite command is **{favorite_command}** 🎈")
