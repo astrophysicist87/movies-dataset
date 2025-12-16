@@ -75,6 +75,9 @@ elif selection == 1:
             ),
         },)
 
+
+st.write("dataframe(0) = ", dataframe)
+
 #====================================================================
 # if dataframe is defined, do fitting and plotting
 if dataframe is not None:
