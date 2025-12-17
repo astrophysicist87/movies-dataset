@@ -60,7 +60,7 @@ def load_data(uploaded_file):
 # Display guesses for initial parameters
 initial_guesses = st.data_editor(
     pd.DataFrame({
-    "Parameter": [st.latex(r'''a'''), r'''b''', r'''c''', r'''d'''],
+    "Parameter": [r'''$a$''', r'$b$', '''$c$''', '$d$'],
     "Value": [1.0, 1.0, 1.0, 1.0]
 }),
     # Lock the number of rows so users can't add/delete parameters
