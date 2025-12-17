@@ -61,7 +61,7 @@ def load_data(uploaded_file):
     return df
 
 # Display guesses for initial parameters
-st.write("Initial guesses for parameters (A, tau, omega, phi):",)
+st.write("Initial guesses for parameters ($A$, $\\tau$, $\\omega$, $\\phi$):",)
 initial_guesses = st.data_editor(
     pd.DataFrame({
     "Parameter": ['A', "$\\tau$", 'omega', 'phi'],
