@@ -114,8 +114,8 @@ if selection == 0:
                 model_predictions = fit_function(x_fit, *fitted_params)
 
                 # Prepare data for plotting
-                df_fit = pd.DataFrame({'x': x_fit, 'y': model_predictions, 'Type': 'Fit Curve'})
-                df_data = pd.DataFrame({'x': xData, 'y': yData, 'Type': 'Data Points'})
+                df_fit = pd.DataFrame({'t': x_fit, 'f': model_predictions, 'Type': 'Fit Curve'})
+                df_data = pd.DataFrame({'t': xData, 'f': yData, 'Type': 'Data Points'})
                 
                 # Create the scatter plot for data and line plot for the fit
                 fig = px.scatter(df_data, x='$t$', y='$f(t)$', title="Data Points and Fitted Curve (File Upload)")
@@ -196,8 +196,8 @@ elif selection == 1:
             model_predictions = fit_function(x_fit, *fitted_params)
             
             # Prepare data for plotting
-            df_fit = pd.DataFrame({'x': x_fit, 'y': model_predictions, 'Type': 'Fit Curve'})
-            df_data = pd.DataFrame({'x': xData, 'y': yData, 'Type': 'Data Points'})
+            df_fit = pd.DataFrame({'t': x_fit, 'f': model_predictions, 'Type': 'Fit Curve'})
+            df_data = pd.DataFrame({'t': xData, 'f': yData, 'Type': 'Data Points'})
             
             # Create the scatter plot for data and line plot for the fit
             fig = px.scatter(df_data, x='$t$', y='$f(t)$', title="Data Points and Fitted Curve (Manual Input)")
