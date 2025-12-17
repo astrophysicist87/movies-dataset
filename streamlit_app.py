@@ -19,15 +19,15 @@ st.set_page_config(page_title="Non-Linear Regression App", page_icon="📈")
 st.title("📈 Non-Linear Regression & Data Visualization")
 st.write(
     """
-    This app performs non-linear regression using the function $f(x) = c \\cdot \\tanh(a \\cdot (x - b)) + \\text{Offset}$
+    This app performs non-linear regression using the function $f(x) = c \\cdot \\tanh(a \\cdot (x - b)) + d$
     and visualizes the resulting best-fit curve in comparison to the collected data points.
     """
 )
 
 # --- 2. Define the Fit Function ---
-def fit_function(x, a, b, c, Offset):
+def fit_function(x, a, b, c, d):
     # The model function for curve_fit
-    return c * np.tanh(a * (x - b)) + Offset
+    return c * np.tanh(a * (x - b)) + d
     
 
 # --- 3. Data Loading and Selection UI ---
@@ -57,6 +57,34 @@ def load_data(uploaded_file):
     df = pd.read_csv(uploaded_file)
     return df
 
+# Display guesses for initial parameters
+initial_guesses = st.data_editor(
+    pd.DataFrame({
+    "Parameter": ["$a$", "$b$", "$c$", "$d$"],
+    "Value": [1.0, 1.0, 1.0, 1.0]
+}),
+    # Lock the number of rows so users can't add/delete parameters
+    num_rows="fixed",
+    # Hide the 0,1,2... index column
+    hide_index=True,
+    # Configure specific column behaviors
+    column_config={
+        "Parameter Name": st.column_config.TextColumn(
+            "Parameter Name",
+            disabled=True  # This makes the first column Read-Only
+        ),
+        "Value": st.column_config.Column(
+            "Setting Value",
+            help="Click to edit this value"
+        )
+    },
+    # Ensure the editor takes up reasonable width
+    use_container_width=True
+)
+std.write(
+    "Initial guesses for parameters: ",
+    initial_guesses
+)
 
 #========================================
 # --- Option 0: Upload data from file ---
@@ -79,10 +107,10 @@ if selection == 0:
                 st.write("### Regression Results")
 
                 # Perform curve fitting
-                initial_guesses = [1.0, 0.0, 1.0, 0.0] 
+                #initial_guesses = [1.0, 0.0, 1.0, 0.0] 
                 fitted_params, pcov = curve_fit(fit_function, xData, yData, initial_guesses)
                 
-                st.write("Fitted Parameters (a, b, c, Offset):", fitted_params)
+                st.write("Fitted Parameters (a, b, c, d):", fitted_params)
                 
                 # Get predictions for a smooth plot
                 x_fit = np.linspace(xData.min(), xData.max(), 500)
@@ -160,11 +188,11 @@ elif selection == 1:
         # 4. Use curve_fit to find optimal parameters
         try:
             # Initial guesses: use statistics from the input data
-            initial_guesses = [1.0, xData.mean(), (yData.max() - yData.min()) / 2, yData.mean()] 
+            #initial_guesses = [1.0, xData.mean(), (yData.max() - yData.min()) / 2, yData.mean()] 
             fitted_params, pcov = curve_fit(fit_function, xData, yData, p0=initial_guesses)
             
             # 5. Get predictions and evaluate
-            st.write("Fitted Parameters (a, b, c, Offset):", fitted_params)
+            st.write("Fitted Parameters (a, b, c, d):", fitted_params)
             
             # Create smooth X values for a smooth curve plot
             x_fit = np.linspace(xData.min(), xData.max(), 500)
@@ -187,7 +215,7 @@ elif selection == 1:
 
 
     elif len(dataframe) > 1:
-        st.info(f"You currently have {len(dataframe)} data points. Input at least 4 points for the regression to run reliably (4 parameters: a, b, c, Offset).")
+        st.info(f"You currently have {len(dataframe)} data points. Input at least 4 points for the regression to run reliably (4 parameters: a, b, c, d).")
         # Plot just the raw data for visual feedback
         fig = px.scatter(dataframe, x='x', y='y', title="Data Points (Regression requires more data)")
         st.plotly_chart(fig)
