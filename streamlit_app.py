@@ -117,7 +117,7 @@ if selection == 0:
 
                 # Perform curve fitting
                 #initial_guesses = [1.0, 0.0, 1.0, 0.0]
-                fitted_params, pcov = curve_fit(fit_function, xData, yData, p0=initial_guesses['Value'].to_numpy())
+                fitted_params, pcov = curve_fit(fit_function, xData, yData, p0=initial_guesses['Value'].to_numpy(), absolute_sigma=True)
                 
                 # Display fit parameters and corresponding uncertainties
                 st.write("Fitted Parameters ($A$, $\\tau$, $\\omega$, $\\phi$):")
