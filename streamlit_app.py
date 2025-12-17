@@ -172,12 +172,12 @@ elif selection == 1:
         on_change=update_manual_df, # Function to call when data changes
         column_config={
             "t": st.column_config.NumberColumn(
-                label="$t$",
+                label="t",
                 step=1e-16,
                 format="%.8f",
             ),
             "f": st.column_config.NumberColumn(
-                label="$f(t)$",
+                label="f(t)",
                 step=1e-16,
                 format="%.8f",
             ),
