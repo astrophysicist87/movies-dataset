@@ -131,7 +131,7 @@ if selection == 0:
                 
                 # Print r^2
                 r2 = get_r_squared(yData, fit_function(xData, *fitted_params))
-                st.write(rf'''r^2 = {r2}''')
+                st.write(rf'''$r^2$ = {r2}''')
             
                 # Create the scatter plot for data and line plot for the fit
                 fig = px.scatter(df_data, x='t', y='f(t)', title="Data Points and Fitted Curve (File Upload)")
@@ -217,7 +217,7 @@ elif selection == 1:
             
             # Print r^2
             r2 = get_r_squared(yData, fit_function(xData, *fitted_params))
-            st.write(rf'''r^2 = {r2}''')
+            st.write(rf'''$r^2$ = {r2}''')
             
             # Create the scatter plot for data and line plot for the fit
             fig = px.scatter(df_data, x='t', y='f(t)', title="Data Points and Fitted Curve (Manual Input)")
