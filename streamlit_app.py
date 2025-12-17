@@ -157,7 +157,7 @@ elif selection == 1:
         
         st.session_state['manual_df'] = pd.DataFrame(
             [
-                {"t": 0.0, "f": 0.0}
+                {'t': 0.0, 'f(t)': 0.0}
             ]
         )
 
@@ -171,13 +171,13 @@ elif selection == 1:
         key="data_editor", # Unique key for the editor widget
         on_change=update_manual_df, # Function to call when data changes
         column_config={
-            "t": st.column_config.NumberColumn(
-                label="t",
+            't': st.column_config.NumberColumn(
+                label='t',
                 step=1e-16,
                 format="%.8f",
             ),
-            "f(t)": st.column_config.NumberColumn(
-                label="f(t)",
+            'f(t)': st.column_config.NumberColumn(
+                label='f(t)',
                 step=1e-16,
                 format="%.8f",
             ),
@@ -226,7 +226,7 @@ elif selection == 1:
         except RuntimeError:
             st.warning("Could not find optimal parameters for the fit function. This can happen if the data does not match the fit model well or if there isn't enough variance in the data.")
         except ValueError as e:
-            st.error(f"Error during fitting (ValueError): {e}. This might be due to identical X or Y values.")
+            st.error(f"Error during fitting (ValueError): {e}. This might be due to identical t or f(t) values.")
 
 
     elif len(dataframe) > 1:
