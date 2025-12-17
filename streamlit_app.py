@@ -25,12 +25,9 @@ st.write(
 )
 
 # --- 2. Define the Fit Function ---
-#def fit_function(x, a, b, c, d):
-#    # The model function for curve_fit
-#    return c * np.tanh(a * (x - b)) + d
-def fit_function(x, A, tau, omega, phi):
+def fit_function(t, A, tau, omega, phi):
     # The model function for curve_fit
-    return A * np.exp(-x / tau) * np.cos(omega * x + phi)
+    return A * np.exp(-t / tau) * np.cos(omega * t + phi)
     
 
 # --- 3. Data Loading and Selection UI ---
@@ -98,11 +95,11 @@ if selection == 0:
             st.write("### Uploaded Data Preview")
             st.write(dataframe)
 
-            # Ensure 'x' and 'y' columns exist
-            if 'x' in dataframe.columns and 'y' in dataframe.columns:
+            # Ensure 't' and 'f' columns exist
+            if 't' in dataframe.columns and 'f' in dataframe.columns:
                 
-                xData = dataframe['x'].to_numpy()
-                yData = dataframe['y'].to_numpy()
+                xData = dataframe['t'].to_numpy()
+                yData = dataframe['f'].to_numpy()
                 
                 st.write("### Regression Results")
 
@@ -110,7 +107,7 @@ if selection == 0:
                 #initial_guesses = [1.0, 0.0, 1.0, 0.0]
                 fitted_params, pcov = curve_fit(fit_function, xData, yData, initial_guesses['Value'].to_numpy())
                 
-                st.write("Fitted Parameters (A, tau, omega, phi):", fitted_params)
+                st.write("Fitted Parameters ($A$, $\\tau$, $\\omega$, $\\phi$):", fitted_params)
                 
                 # Get predictions for a smooth plot
                 x_fit = np.linspace(xData.min(), xData.max(), 500)
@@ -121,12 +118,12 @@ if selection == 0:
                 df_data = pd.DataFrame({'x': xData, 'y': yData, 'Type': 'Data Points'})
                 
                 # Create the scatter plot for data and line plot for the fit
-                fig = px.scatter(df_data, x='x', y='y', title="Data Points and Fitted Curve (File Upload)")
-                fig.add_scatter(x=df_fit['x'], y=df_fit['y'], mode='lines', name='Fit Curve', line=dict(color='red'))
+                fig = px.scatter(df_data, x='$t$', y='$f(t)$', title="Data Points and Fitted Curve (File Upload)")
+                fig.add_scatter(x=df_fit['t'], y=df_fit['f'], mode='lines', name='Fit Curve', line=dict(color='red'))
                 
                 st.plotly_chart(fig)
             else:
-                st.error("The uploaded file must contain columns named 'x' and 'y'.")
+                st.error("The uploaded file must contain columns named 't' and 'f'.")
 
         except Exception as e:
             st.error(f"Error processing file: {e}")
@@ -145,7 +142,7 @@ elif selection == 1:
         
         st.session_state['manual_df'] = pd.DataFrame(
             [
-                {"x": 0.0, "y": 0.0}
+                {"t": 0.0, "f": 0.0}
             ]
         )
 
@@ -160,14 +157,14 @@ elif selection == 1:
         on_change=update_manual_df, # Function to call when data changes
         column_config={
             "x": st.column_config.NumberColumn(
-                label="X Value",
+                label="$t$",
                 step=1e-16,
-                format="%.16f",
+                format="%.8f",
             ),
             "y": st.column_config.NumberColumn(
-                label="Y Value",
+                label="$f(t)$",
                 step=1e-16,
-                format="%.16f",
+                format="%.8f",
             ),
         }
     )
@@ -182,8 +179,8 @@ elif selection == 1:
     elif len(dataframe) >= 4:
         
         # (Assuming xData and yData are defined as numpy arrays)
-        xData = dataframe['x'].to_numpy()
-        yData = dataframe['y'].to_numpy()
+        xData = dataframe['t'].to_numpy()
+        yData = dataframe['f'].to_numpy()
         
         # 4. Use curve_fit to find optimal parameters
         try:
@@ -192,7 +189,7 @@ elif selection == 1:
             fitted_params, pcov = curve_fit(fit_function, xData, yData, p0=initial_guesses['Value'].to_numpy())
             
             # 5. Get predictions and evaluate
-            st.write("Fitted Parameters (A, tau, omega, phi):", fitted_params)
+            st.write("Fitted Parameters ($A$, $\\tau$, $\\omega$, $\\phi$):", fitted_params)
             
             # Create smooth X values for a smooth curve plot
             x_fit = np.linspace(xData.min(), xData.max(), 500)
@@ -203,21 +200,21 @@ elif selection == 1:
             df_data = pd.DataFrame({'x': xData, 'y': yData, 'Type': 'Data Points'})
             
             # Create the scatter plot for data and line plot for the fit
-            fig = px.scatter(df_data, x='x', y='y', title="Data Points and Fitted Curve (Manual Input)")
-            fig.add_scatter(x=df_fit['x'], y=df_fit['y'], mode='lines', name='Fit Curve', line=dict(color='red'))
+            fig = px.scatter(df_data, x='$t$', y='$f(t)$', title="Data Points and Fitted Curve (Manual Input)")
+            fig.add_scatter(x=df_fit['t'], y=df_fit['f'], mode='lines', name='Fit Curve', line=dict(color='red'))
             
             st.plotly_chart(fig)
             
         except RuntimeError:
-            st.warning("Could not find optimal parameters for the fit function. This can happen if the data does not match the tanh model well or if there isn't enough variance in the data.")
+            st.warning("Could not find optimal parameters for the fit function. This can happen if the data does not match the fit model well or if there isn't enough variance in the data.")
         except ValueError as e:
             st.error(f"Error during fitting (ValueError): {e}. This might be due to identical X or Y values.")
 
 
     elif len(dataframe) > 1:
-        st.info(f"You currently have {len(dataframe)} data points. Input at least 4 points for the regression to run reliably (4 parameters: A, tau, omega, phi).")
+        st.info(f"You currently have {len(dataframe)} data points. Input at least 4 points for the regression to run reliably (4 parameters: $A$, $\\tau$, $\\omega$, $\\phi$).")
         # Plot just the raw data for visual feedback
-        fig = px.scatter(dataframe, x='x', y='y', title="Data Points (Regression requires more data)")
+        fig = px.scatter(dataframe, x='$t$', y='$f(t)$', title="Data Points (Regression requires more data)")
         st.plotly_chart(fig)
     else:
         st.info("Please input at least two data points.")
