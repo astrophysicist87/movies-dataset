@@ -87,7 +87,7 @@ initial_guesses = st.data_editor(
 # --- Option 0: Upload data from file ---
 #========================================
 if selection == 0:
-    uploaded_file = st.file_uploader("Choose a CSV file with 'x' and 'y' columns")
+    uploaded_file = st.file_uploader("Choose a CSV file with 't' and 'f' columns")
     
     if uploaded_file is not None:
         try:
@@ -156,12 +156,12 @@ elif selection == 1:
         key="data_editor", # Unique key for the editor widget
         on_change=update_manual_df, # Function to call when data changes
         column_config={
-            "x": st.column_config.NumberColumn(
+            "t": st.column_config.NumberColumn(
                 label="$t$",
                 step=1e-16,
                 format="%.8f",
             ),
-            "y": st.column_config.NumberColumn(
+            "f": st.column_config.NumberColumn(
                 label="$f(t)$",
                 step=1e-16,
                 format="%.8f",
