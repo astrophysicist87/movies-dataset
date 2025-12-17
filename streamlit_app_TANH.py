@@ -19,18 +19,15 @@ st.set_page_config(page_title="Non-Linear Regression App", page_icon="📈")
 st.title("📈 Non-Linear Regression & Data Visualization")
 st.write(
     """
-    This app performs non-linear regression using the function $f(x) = A e^{-t/\\tau}\\cdot \\cos(\\omega \\cdot t + \\phi)$
+    This app performs non-linear regression using the function $f(x) = c \\cdot \\tanh(a \\cdot (x - b)) + d$
     and visualizes the resulting best-fit curve in comparison to the collected data points.
     """
 )
 
 # --- 2. Define the Fit Function ---
-#def fit_function(x, a, b, c, d):
-#    # The model function for curve_fit
-#    return c * np.tanh(a * (x - b)) + d
-def fit_function(x, A, tau, omega, phi):
+def fit_function(x, a, b, c, d):
     # The model function for curve_fit
-    return A * np.exp(-t / tau) * np.cos(omega * t + phi)
+    return c * np.tanh(a * (x - b)) + d
     
 
 # --- 3. Data Loading and Selection UI ---
@@ -61,10 +58,9 @@ def load_data(uploaded_file):
     return df
 
 # Display guesses for initial parameters
-st.write("Initial guesses for parameters (A, tau, omega, phi):",)
 initial_guesses = st.data_editor(
     pd.DataFrame({
-    "Parameter": ['A', "$\\tau$", 'omega', 'phi'],
+    "Parameter": ['a','b','c','d'],
     "Value": [1.0, 1.0, 1.0, 1.0]
 }),
     # Lock the number of rows so users can't add/delete parameters
@@ -83,7 +79,7 @@ initial_guesses = st.data_editor(
         )
     },
     # Ensure the editor takes up reasonable width
-    width='stretch'
+    use_container_width=True
 )
 
 #========================================
@@ -110,7 +106,7 @@ if selection == 0:
                 #initial_guesses = [1.0, 0.0, 1.0, 0.0]
                 fitted_params, pcov = curve_fit(fit_function, xData, yData, initial_guesses['Value'].to_numpy())
                 
-                st.write("Fitted Parameters (A, tau, omega, phi):", fitted_params)
+                st.write("Fitted Parameters (a, b, c, d):", fitted_params)
                 
                 # Get predictions for a smooth plot
                 x_fit = np.linspace(xData.min(), xData.max(), 500)
@@ -192,7 +188,7 @@ elif selection == 1:
             fitted_params, pcov = curve_fit(fit_function, xData, yData, p0=initial_guesses['Value'].to_numpy())
             
             # 5. Get predictions and evaluate
-            st.write("Fitted Parameters (A, tau, omega, phi):", fitted_params)
+            st.write("Fitted Parameters (a, b, c, d):", fitted_params)
             
             # Create smooth X values for a smooth curve plot
             x_fit = np.linspace(xData.min(), xData.max(), 500)
@@ -215,7 +211,7 @@ elif selection == 1:
 
 
     elif len(dataframe) > 1:
-        st.info(f"You currently have {len(dataframe)} data points. Input at least 4 points for the regression to run reliably (4 parameters: A, tau, omega, phi).")
+        st.info(f"You currently have {len(dataframe)} data points. Input at least 4 points for the regression to run reliably (4 parameters: a, b, c, d).")
         # Plot just the raw data for visual feedback
         fig = px.scatter(dataframe, x='x', y='y', title="Data Points (Regression requires more data)")
         st.plotly_chart(fig)
