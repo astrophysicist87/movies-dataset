@@ -119,7 +119,7 @@ if selection == 0:
                 #initial_guesses = [1.0, 0.0, 1.0, 0.0]
                 fitted_params, pcov = curve_fit(fit_function, xData, yData, initial_guesses['Value'].to_numpy())
                 
-                st.write("Fitted Parameters ($A$, $\\tau$, $\\omega$, $\\phi$):", fitted_params)
+                st.write("Fitted Parameters ($A$, $\\tau$, $\\omega$, $\\phi$):", fitted_params, np.sqrt(np.diag(pcov)))
                 
                 # Get predictions for a smooth plot
                 x_fit = np.linspace(xData.min(), xData.max(), 500)
@@ -131,7 +131,7 @@ if selection == 0:
                 
                 # Print r^2
                 r2 = get_r_squared(yData, fit_function(xData, *fitted_params))
-                st.write(rf'''$r^2$ = {r2}''')
+                st.write(rf'''Goodness-of-fit $r^2$ = {r2}''')
             
                 # Create the scatter plot for data and line plot for the fit
                 fig = px.scatter(df_data, x='t', y='f(t)', title="Data Points and Fitted Curve (File Upload)")
@@ -205,7 +205,7 @@ elif selection == 1:
             fitted_params, pcov = curve_fit(fit_function, xData, yData, p0=initial_guesses['Value'].to_numpy())
             
             # 5. Get predictions and evaluate
-            st.write("Fitted Parameters ($A$, $\\tau$, $\\omega$, $\\phi$):", fitted_params)
+            st.write("Fitted Parameters ($A$, $\\tau$, $\\omega$, $\\phi$):", fitted_params, np.sqrt(np.diag(pcov)))
             
             # Create smooth X values for a smooth curve plot
             x_fit = np.linspace(xData.min(), xData.max(), 500)
@@ -217,7 +217,7 @@ elif selection == 1:
             
             # Print r^2
             r2 = get_r_squared(yData, fit_function(xData, *fitted_params))
-            st.write(rf'''$r^2$ = {r2}''')
+            st.write(rf'''Goodness-of-fit $r^2$ = {r2}''')
             
             # Create the scatter plot for data and line plot for the fit
             fig = px.scatter(df_data, x='t', y='f(t)', title="Data Points and Fitted Curve (Manual Input)")
