@@ -119,8 +119,10 @@ if selection == 0:
                 #initial_guesses = [1.0, 0.0, 1.0, 0.0]
                 fitted_params, pcov = curve_fit(fit_function, xData, yData, initial_guesses['Value'].to_numpy())
                 
-                st.write("Fitted Parameters ($A$, $\\tau$, $\\omega$, $\\phi$):", np.c_[ fitted_params, np.sqrt(np.diag(pcov)) ])
-                
+                st.write("Fitted Parameters ($A$, $\\tau$, $\\omega$, $\\phi$):",
+                         pd.DataFrame({"Parameter": fitted_params,
+                                       "Uncertainty": np.sqrt(np.diag(pcov))}))
+
                 # Get predictions for a smooth plot
                 x_fit = np.linspace(xData.min(), xData.max(), 500)
                 model_predictions = fit_function(x_fit, *fitted_params)
@@ -134,7 +136,7 @@ if selection == 0:
                 st.write(rf'''Goodness-of-fit $r^2$ = {r2}''')
             
                 # Create the scatter plot for data and line plot for the fit
-                fig = px.scatter(df_data, x='t', y='f(t)', name='Data', title="Data Points and Fitted Curve (File Upload)")
+                fig = px.scatter(df_data, x='t', y='f(t)', title="Data Points and Fitted Curve (File Upload)")
                 fig.add_scatter(x=df_fit['t'], y=df_fit['f(t)'], mode='lines', name='Fit', line=dict(color='red'))
                 
                 st.plotly_chart(fig)
@@ -205,7 +207,9 @@ elif selection == 1:
             fitted_params, pcov = curve_fit(fit_function, xData, yData, p0=initial_guesses['Value'].to_numpy())
             
             # 5. Get predictions and evaluate
-            st.write("Fitted Parameters ($A$, $\\tau$, $\\omega$, $\\phi$):", np.c_[ fitted_params, np.sqrt(np.diag(pcov)) ])
+            st.write("Fitted Parameters ($A$, $\\tau$, $\\omega$, $\\phi$):",
+                     pd.DataFrame({"Parameter": fitted_params,
+                                   "Uncertainty": np.sqrt(np.diag(pcov))}))
             
             # Create smooth X values for a smooth curve plot
             x_fit = np.linspace(xData.min(), xData.max(), 500)
@@ -220,7 +224,7 @@ elif selection == 1:
             st.write(rf'''Goodness-of-fit $r^2$ = {r2}''')
             
             # Create the scatter plot for data and line plot for the fit
-            fig = px.scatter(df_data, x='t', y='f(t)', name='Data', title="Data Points and Fitted Curve (Manual Input)")
+            fig = px.scatter(df_data, x='t', y='f(t)', title="Data Points and Fitted Curve (Manual Input)")
             fig.add_scatter(x=df_fit['t'], y=df_fit['f(t)'], mode='lines', name='Fit', line=dict(color='red'))
             
             st.plotly_chart(fig)
